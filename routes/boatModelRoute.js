@@ -4,7 +4,8 @@ const {
     updateModel_put,
     deleteModel_delete,
     getAllModels_get,
-    getModelByModelCode_get
+    getModelByModelCode_get,
+    getModelsByManufacturerCode_get
 } = require("../controllers/boatModelController.js");
 
 const router = Router();
@@ -14,5 +15,6 @@ router.put("/model/update/:id", updateModel_put);
 router.delete("/model/delete/:id", deleteModel_delete);
 router.get("/model/getall", getAllModels_get);
 router.get("/model/getone/:id",getModelByModelCode_get);
+router.get("/model/getonemanufacturer/:id", getModelsByManufacturerCode_get);
 
 module.exports = router;

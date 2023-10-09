@@ -35,7 +35,7 @@ const createType_post = async (req, res) => {
 // update a type
 const updateType_put = async (req, res) => {
     try {
-        const typeCode = req.params.id;
+        const typeId = req.params.id;
         const newTypeName = req.body.typeName;
 
         if(!newTypeName){
@@ -43,7 +43,7 @@ const updateType_put = async (req, res) => {
         };
 
         const existingType = await boatType.findOne({
-            typeCode: typeCode
+            _id: typeId
         });
 
         const checkTypeNameExists = await boatType.findOne({
@@ -83,10 +83,10 @@ const updateType_put = async (req, res) => {
 // delete a type
 const deleteManufacturer_delete = async (req, res) => {
     try {
-        const typeCode = req.params.id;
+        const typeId = req.params.id;
 
         const existingType = await boatType.findOne({
-            typeCode: typeCode
+            _id: typeId
         });
 
         if (!existingType) {
@@ -127,9 +127,9 @@ const getAllTypes_get = async (req, res) => {
 //get type by typeCode
 const getTypeByTypeCode_get = async (req, res) => {
     try {
-        const typeCode = req.params.id;
+        const typeId = req.params.id;
         const type = await boatType.findOne({
-            typeCode: typeCode
+            _id: typeId
         });
         
         if (!type) {

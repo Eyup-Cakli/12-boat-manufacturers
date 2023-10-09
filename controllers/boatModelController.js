@@ -4,9 +4,9 @@ const boatModel = require('../models/concrete/boatModel.js');
 // add a new model
 const createModel_post = async (req, res) => {
     try {
-        const manufacturerCode = req.body.manufacturerCode;
+        const manufacturerId = req.body.manufacturerId;
         const modelName = req.body.modelName;
-        const typeCode = req.body.typeCode;
+        const typeId = req.body.typeId;
         const lengthMeter = req.body.lengthMeter;
         const lengthFeet = req.body.lengthFeet;
         const lengthInches = req.body.lengthInches;
@@ -15,9 +15,9 @@ const createModel_post = async (req, res) => {
         const beamInches = req.body.beamInches;
 
         const newModel = new boatModel({
-            manufacturerCode: manufacturerCode,
+            manufacturerId: manufacturerId,
             modelName: modelName,
-            typeCode: typeCode,
+            typeId: typeId,
             lengthMeter: lengthMeter,
             lengthFeet: lengthFeet,
             lengthInches: lengthInches,
@@ -27,7 +27,7 @@ const createModel_post = async (req, res) => {
         });
 
         const existingModel = await boatModel.findOne({
-            manufacturerCode: manufacturerCode,
+            manufacturerId: manufacturerId,
             modelName: modelName
         });
         
@@ -50,10 +50,10 @@ const createModel_post = async (req, res) => {
 // update a model
 const updateModel_put = async (req, res) => {
     try {
-        const modelCode = req.params.id;
-        const newManufacturerCode = req.body.manufacturerCode;
+        const modelId = req.params.id;
+        const newManufacturerId = req.body.manufacturerId;
         const newModelName = req.body.modelName;
-        const newTypeCode = req.body.typeCode;
+        const newTypeId = req.body.typeId;
         const newLengthMeter = req.body.lengthMeter;
         const newLengthFeet = req.body.lengthFeet;
         const newLengthInches = req.body.lengthInches;
@@ -66,7 +66,7 @@ const updateModel_put = async (req, res) => {
         }
 
         const existingModel = await boatModel.findOne({
-            modelCode: modelCode
+            modelId: modelId
         });
 
         const checkModelNameExists = await boatModel.findOne({ 
@@ -90,9 +90,9 @@ const updateModel_put = async (req, res) => {
         }
 
         if (existingModel) {
-            existingModel.manufacturerCode = newManufacturerCode;
+            existingModel.manufacturerId = newManufacturerId;
             existingModel.modelName = newModelName;
-            existingModel.typeCode = newTypeCode;
+            existingModel.typeId = newTypeId;
             existingModel.lengthMeter = newLengthMeter;
             existingModel.lengthFeet = newLengthFeet;
             existingModel.lengthInches = newLengthInches;
@@ -114,10 +114,10 @@ const updateModel_put = async (req, res) => {
 // delete a model
 const deleteModel_delete = async (req, res) => {
     try {
-        const modelCode = req.params.id;
+        const modelId = req.params.id;
 
         const existingModel = await boatModel.findOne({
-            modelCode: modelCode
+            modelId: modelId
         });
 
         if (!existingModel) {
@@ -156,14 +156,14 @@ const getAllModels_get = async (req, res) => {
 // get model by modelcode
 const getModelByModelCode_get = async (req, res) => {
     try {
-        const modelCode = req.params.id;
+        const modelId = req.params.id;
         
         const model = await boatModel.findOne({
-            modelCode: modelCode
+            modelId: modelId
         });
 
         if (!model) {
-            return res.status(404).json({ error: "Model not deleted." });
+            return res.status(404).json({ error: "Model not found." });
         }
 
         if (model.isDeleted) {
@@ -177,10 +177,32 @@ const getModelByModelCode_get = async (req, res) => {
     }
 }
 
+// get models by manufacturers
+const getModelsByManufacturerCode_get = async (req, res) => {
+    try {
+        const manufacturerId = req.params.id;
+
+        const model = await boatModel.find({
+            manufacturerId: manufacturerId,
+            isDeleted: false
+        });
+
+        if (!model) {
+            return res.status(404).json({ error: "Model not found." })
+        }
+
+        return res.status(200).json(model);
+    } catch (err) {
+        console.error("Caught an error: ", err);
+        return res.status(500).json('Internal server error.');
+    }
+}
+
 module.exports = {
     createModel_post,
     updateModel_put,
     deleteModel_delete,
     getAllModels_get,
-    getModelByModelCode_get
+    getModelByModelCode_get,
+    getModelsByManufacturerCode_get
 };
