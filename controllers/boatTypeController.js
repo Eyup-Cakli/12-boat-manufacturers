@@ -1,4 +1,3 @@
-const res = require("express/lib/response.js");
 const boatType = require("../models/concrete/boatType.js");
 
 //COMMANDS
@@ -16,7 +15,6 @@ const createType_post = async (req, res) => {
     });
 
     if (!typeName) {
-        console.log('type name: ' + typeName);
         return res.status(403).json({ error: "Enter a type name." });
     }
 
@@ -81,7 +79,7 @@ const updateType_put = async (req, res) => {
 };
 
 // delete a type
-const deleteManufacturer_delete = async (req, res) => {
+const deleteType_delete = async (req, res) => {
     try {
         const typeId = req.params.id;
 
@@ -101,8 +99,6 @@ const deleteManufacturer_delete = async (req, res) => {
             existingType.isDeleted = true;
             await existingType.save();
             return res.status(200).json({ message: "Type deleted successfully." });
-        } else {
-            return res.status(403).json({ err });
         }
     } catch (err) {
         console.error("Caught an error: ", err);
@@ -124,7 +120,7 @@ const getAllTypes_get = async (req, res) => {
     }
 };
 
-//get type by typeCode
+//get type by id
 const getTypeByTypeCode_get = async (req, res) => {
     try {
         const typeId = req.params.id;
@@ -137,7 +133,7 @@ const getTypeByTypeCode_get = async (req, res) => {
         }
 
         if (type.isDeleted) {
-            return res.status(200).json({ error: "Type deleted" });
+            return res.status(403).json({ error: "Type deleted" });
         }
         return res.status(200).json(type);
     } catch (err) {
@@ -149,7 +145,7 @@ const getTypeByTypeCode_get = async (req, res) => {
 module.exports = {
     createType_post,
     updateType_put,
-    deleteManufacturer_delete,
+    deleteType_delete,
     getAllTypes_get,
     getTypeByTypeCode_get
 };

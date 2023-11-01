@@ -1,4 +1,7 @@
 const boatModel = require('../models/concrete/boatModel.js');
+const boatManufacturer = require('../models/concrete/boatManufacturer.js');
+const boatType = require('../models/concrete/boatType.js');
+const boatHullMetarial = require('../models/concrete/boatHullMetarial.js');
 
 // COMMANDS 
 // add a new model
@@ -8,22 +11,18 @@ const createModel_post = async (req, res) => {
         const modelName = req.body.modelName;
         const typeId = req.body.typeId;
         const lengthMeter = req.body.lengthMeter;
-        const lengthFeet = req.body.lengthFeet;
-        const lengthInches = req.body.lengthInches;
         const beamMeter = req.body.beamMeter;
-        const beamFeet = req.body.beamFeet;
-        const beamInches = req.body.beamInches;
+        const draftMeter = req.body.draftMeter;
+        const boatHullMetarialId = req.res.boatHullMetarialId;
 
         const newModel = new boatModel({
             manufacturerId: manufacturerId,
             modelName: modelName,
             typeId: typeId,
             lengthMeter: lengthMeter,
-            lengthFeet: lengthFeet,
-            lengthInches: lengthInches,
             beamMeter: beamMeter,
-            beamFeet: beamFeet,
-            beamInches: beamInches     
+            draftMeter: draftMeter,
+            boatHullMetarialId: boatHullMetarialId     
         });
 
         const existingModel = await boatModel.findOne({
@@ -55,18 +54,16 @@ const updateModel_put = async (req, res) => {
         const newModelName = req.body.modelName;
         const newTypeId = req.body.typeId;
         const newLengthMeter = req.body.lengthMeter;
-        const newLengthFeet = req.body.lengthFeet;
-        const newLengthInches = req.body.lengthInches;
         const newBeamMeter = req.body.beamMeter;
-        const newBeamFeet = req.body.beamFeet;
-        const newBeamInches = req.body.beamInches;
+        const newDraftMeter = req.body.draftMeter;
+        const boatHullMetarialId = req.body.boatHullMetarialId;
 
         if (!newModelName) {
             return res.status(403).json({ error: 'Model name can not be empty.' });
         }
 
         const existingModel = await boatModel.findOne({
-            modelId: modelId
+            _id: modelId
         });
 
         const checkModelNameExists = await boatModel.findOne({ 
@@ -94,11 +91,9 @@ const updateModel_put = async (req, res) => {
             existingModel.modelName = newModelName;
             existingModel.typeId = newTypeId;
             existingModel.lengthMeter = newLengthMeter;
-            existingModel.lengthFeet = newLengthFeet;
-            existingModel.lengthInches = newLengthInches;
             existingModel.beamMeter = newBeamMeter;
-            existingModel.beamFeet = newBeamFeet;
-            existingModel.beamInches = newBeamInches;
+            existingModel.newDraftMeter = newDraftMeter; 
+            existingModel.boatHullMetarialId = boatHullMetarialId;
 
             const savedModel = await existingModel.save();
             return res.status(200).json(savedModel);
@@ -117,7 +112,7 @@ const deleteModel_delete = async (req, res) => {
         const modelId = req.params.id;
 
         const existingModel = await boatModel.findOne({
-            modelId: modelId
+            _id: modelId
         });
 
         if (!existingModel) {
@@ -156,10 +151,10 @@ const getAllModels_get = async (req, res) => {
 // get model by modelcode
 const getModelByModelCode_get = async (req, res) => {
     try {
-        const modelId = req.params.id;
+        const manufacturerId = req.params.id;
         
-        const model = await boatModel.findOne({
-            modelId: modelId
+        const model = await boatModel.find({
+            manufacturerId: manufacturerId
         });
 
         if (!model) {
@@ -198,11 +193,75 @@ const getModelsByManufacturerCode_get = async (req, res) => {
     }
 }
 
+// get manufacturer name by id
+const getManufacturerNameById = async (req, res) => {
+    try {
+        const modelId = req.params.id;
+        const model = await boatModel.findOne({
+            _id: modelId,
+        });
+        const manufacturerId = model.manufacturerId;
+
+        const manufacturer = await boatManufacturer.findOne({
+            _id: manufacturerId
+        });
+        const manufacturerName = manufacturer.manufacturerName;
+        res.status(200).json(manufacturerName);
+    } catch (err) {
+        console.error("Caught an error: ", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+// get type name by id
+const getTypeNameById = async (req, res) => {
+    try {
+        const modelId = req.params.id;
+        const model = await boatModel.findOne({
+            _id: modelId
+        });
+        const typeId = model.typeId;
+
+        const type = await boatType.findOne({
+            _id: typeId
+        });
+
+        const typeName = type.typeName;
+        res.status(200).json(typeName);
+    } catch (err) {
+        console.error("Caught an error: ", err);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+}
+
+const getHullMetarialNameById = async (req, res) => {
+    try {
+        const modelId = req.params.id;
+        const model = await boatModel.findOne({
+            _id: modelId
+        });
+        const boatHullMetarialId = model.boatHullMetarialId;
+
+        const hullMetarial = await boatHullMetarial.findOne({
+            _id: boatHullMetarialId
+        });
+
+        const hullMetarialName = hullMetarial.boatHullMetarialName
+        res.status(200).json(hullMetarialName);
+    } catch (err) {
+        console.error("Caught an error: ", err );
+        return res.status(500).json({ error: "Internal server error." });
+    }
+}
+
 module.exports = {
     createModel_post,
     updateModel_put,
     deleteModel_delete,
     getAllModels_get,
     getModelByModelCode_get,
-    getModelsByManufacturerCode_get
+    getModelsByManufacturerCode_get,
+    getManufacturerNameById,
+    getTypeNameById,
+    getHullMetarialNameById
 };

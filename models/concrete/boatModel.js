@@ -17,20 +17,14 @@ const boatModelSchema = new mongoose.Schema({
     lengthMeter: {
         type: Number
     },
-    lengthFeet: {
-        type: Number
-    },
-    lengthInches: {
-        type: Number
-    },
     beamMeter: {
         type: Number
     },
-    beamFeet: {
+    draftMeter: {
         type: Number
     },
-    beamInches: {
-        type: Number
+    boatHullMetarialId: {
+        type: mongoose.Schema.Types.ObjectId
     },
     ...projectBaseModel
 },{timestamps: true});

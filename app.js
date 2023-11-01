@@ -6,6 +6,7 @@ const boatManufacturerRoute = require("./routes/boatManufacturerRoute.js");
 const boatTypeRoute = require("./routes/boatTypeRoute.js");
 const boatModelRoute = require("./routes/boatModelRoute.js");
 const boatManufacturerLogoRoute = require("./routes/boatManufacturerLogoRoute.js");
+const boatHullMetarialRoute = require("./routes/boatHullMetarialRoute.js");
 
 const app = express();
 const port = 3000;
@@ -45,6 +46,7 @@ app.use(boatManufacturerRoute);
 app.use(boatTypeRoute);
 app.use(boatModelRoute);
 app.use(boatManufacturerLogoRoute);
+app.use(boatHullMetarialRoute);
 
 app.listen(port, () => {
     console.log(`listening on ${port}`)
