@@ -4,7 +4,8 @@ const projectBaseModel = require("../projectBaseModel.js");
 const boatModelSchema = new mongoose.Schema({
     manufacturerId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: [true, 'Manufacturer code should be declared.']
+        required: [true, 'Manufacturer id should be declared.'],
+        ref: 'boatManufacturers'
     },
     modelName: {
         type: String,
@@ -12,7 +13,8 @@ const boatModelSchema = new mongoose.Schema({
     },
     typeId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: [true, 'Type code should be declared.']
+        required: [true, 'Type id should be declared.'],
+        ref: 'boatType'
     },
     lengthMeter: {
         type: Number
@@ -24,7 +26,9 @@ const boatModelSchema = new mongoose.Schema({
         type: Number
     },
     boatHullMetarialId: {
-        type: mongoose.Schema.Types.ObjectId
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, 'Hull metarial id should be declared.'],
+        ref: 'boatHullMetarial'
     },
     ...projectBaseModel
 },{timestamps: true});

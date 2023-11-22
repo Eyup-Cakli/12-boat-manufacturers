@@ -4,16 +4,16 @@ const {
     updateType_put,
     deleteType_delete,
     getAllTypes_get,
-    getTypeByTypeCode_get
+    getTypeById_get
 } = require("../controllers/boatTypeController.js");
 
 const router = Router();
 
-router.post("/type/add", createType_post);
-router.put("/type/update/:id", updateType_put);
-router.delete("/type/delete/:id",deleteType_delete);
+router.post("/type", createType_post);
+router.put("/type/:id", updateType_put);
+router.delete("/type/:id",deleteType_delete);
 
-router.get("/type/getall", getAllTypes_get);
-router.get("/type/getone/:id", getTypeByTypeCode_get);
+router.get("/type/", getAllTypes_get);
+router.get("/type/:id", getTypeById_get);
 
 module.exports = router;

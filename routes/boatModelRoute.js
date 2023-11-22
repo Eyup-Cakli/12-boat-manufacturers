@@ -4,23 +4,25 @@ const {
     updateModel_put,
     deleteModel_delete,
     getAllModels_get,
-    getModelByModelCode_get,
-    getModelsByManufacturerCode_get,
+    getModelById_get,
+    getModelsByManufacturerId_get,
     getManufacturerNameById,
     getTypeNameById,
-    getHullMetarialNameById
+    getHullMetarialNameById,
+    getModelDetails
 } = require("../controllers/boatModelController.js");
 
 const router = Router();
 
-router.post("/model/add", createModel_post);
-router.put("/model/update/:id", updateModel_put);
-router.delete("/model/delete/:id", deleteModel_delete);
-router.get("/model/getall", getAllModels_get);
-router.get("/model/getone/:id",getModelByModelCode_get);
-router.get("/model/getonemanufacturer/:id", getModelsByManufacturerCode_get);
-router.get("/model/getmanufacturername/:id", getManufacturerNameById);
-router.get("/model/gettypename/:id", getTypeNameById);
-router.get("/model/gethullmetarialname/:id", getHullMetarialNameById);
+router.post("/model", createModel_post);
+router.put("/model/:id", updateModel_put);
+router.delete("/model/:id", deleteModel_delete);
+router.get("/model", getAllModels_get);
+router.get("/modeldetails", getModelDetails);
+router.get("/model/:id",getModelById_get);
+router.get("/model-bytmanufacturerid/:id", getModelsByManufacturerId_get);
+router.get("/model-manufacturername/:id", getManufacturerNameById);
+router.get("/model-typename/:id", getTypeNameById);
+router.get("/model-hullmetarialname/:id", getHullMetarialNameById);
 
 module.exports = router;

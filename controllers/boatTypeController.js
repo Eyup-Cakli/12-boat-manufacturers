@@ -121,7 +121,7 @@ const getAllTypes_get = async (req, res) => {
 };
 
 //get type by id
-const getTypeByTypeCode_get = async (req, res) => {
+const getTypeById_get = async (req, res) => {
     try {
         const typeId = req.params.id;
         const type = await boatType.findOne({
@@ -147,5 +147,5 @@ module.exports = {
     updateType_put,
     deleteType_delete,
     getAllTypes_get,
-    getTypeByTypeCode_get
+    getTypeById_get
 };

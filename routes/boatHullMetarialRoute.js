@@ -9,10 +9,10 @@ const {
 
 const router = Router();
 
-router.post("/hullmetarial/add", createBoatHullMetarial_post);
-router.put("/hullmetarial/update/:id", updateBoatHullMetarial_put);
-router.delete("/hullmetarial/delete/:id", deleteBoatHullMetarial_delete);
-router.get("/getallhullmetarials", getAllBoatHull_metarials_get);
-router.get("/hullmetarialgetbyid/:id", getBoatHullMetarialById_get);
+router.post("/hullmetarial", createBoatHullMetarial_post);
+router.put("/hullmetarial/:id", updateBoatHullMetarial_put);
+router.delete("/hullmetarial/:id", deleteBoatHullMetarial_delete);
+router.get("/hullmetarial", getAllBoatHull_metarials_get);
+router.get("/hullmetarial/:id", getBoatHullMetarialById_get);
 
 module.exports = router;

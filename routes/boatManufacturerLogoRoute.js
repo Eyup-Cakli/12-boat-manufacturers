@@ -9,10 +9,10 @@ const {
 
 const router = Router();
 
-router.post("/logo/add", createLogo_post);
-router.put("/logo/update/:id", updateLogo_put);
-router.delete("/logo/delete/:id", deleteLogo_delete);
-router.get("/logo/getall", getAllLogo_get);
-router.get("/logo/getlogo/:id", getImageById_get);
+router.post("/logo", createLogo_post);
+router.put("/logo/:id", updateLogo_put);
+router.delete("/logo/:id", deleteLogo_delete);
+router.get("/logo", getAllLogo_get);
+router.get("/logo/:id", getImageById_get);
 
 module.exports = router;

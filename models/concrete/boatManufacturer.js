@@ -4,7 +4,8 @@ const projectBaseModel = require("../projectBaseModel.js");
 const boatManufacturerSchema = new mongoose.Schema({
     logoId: {
         type: mongoose.Schema.Types.ObjectId,
-        unique: [true, 'This logo id already used.']
+        unique: [true, 'This logo id already used.'],
+        ref: 'boatManufacturerLogos'
     },
     manufacturerName: {
         type: String,

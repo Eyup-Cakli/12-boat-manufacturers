@@ -211,8 +211,23 @@ const getAllManufacturers_get = async (req, res) => {
   }
 };
 
+// population
+const getManufacturerDetails = async (req, res) => {
+  try {
+    const manufacturerDetails = await boatManufacturer.find({ isDeleted: false })
+        .populate({
+          path: 'logoId',
+          select: 'fileName'
+        });
+        return res.status(200).json(manufacturerDetails);
+  } catch (err) {
+    console.error("Caught an error: ", err);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+}
+
 // get manufacturer by manufacturerId
-const getManufacturerByManufacturerCode_get = async (req, res) => {
+const getManufacturerByManufacturerId_get = async (req, res) => {
   try {
     const manufacturerId = req.params.id;
     const manufacturer = await boatManufacturer.findOne({
@@ -258,6 +273,7 @@ module.exports = {
   updateManufacturer_put,
   deleteManufacturer_delete,
   getAllManufacturers_get,
-  getManufacturerByManufacturerCode_get,
+  getManufacturerDetails,
+  getManufacturerByManufacturerId_get,
   getImageByManufacturer_get,
 };

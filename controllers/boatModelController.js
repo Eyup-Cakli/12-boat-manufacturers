@@ -2,6 +2,7 @@ const boatModel = require('../models/concrete/boatModel.js');
 const boatManufacturer = require('../models/concrete/boatManufacturer.js');
 const boatType = require('../models/concrete/boatType.js');
 const boatHullMetarial = require('../models/concrete/boatHullMetarial.js');
+const { model } = require('mongoose');
 
 // COMMANDS 
 // add a new model
@@ -13,7 +14,7 @@ const createModel_post = async (req, res) => {
         const lengthMeter = req.body.lengthMeter;
         const beamMeter = req.body.beamMeter;
         const draftMeter = req.body.draftMeter;
-        const boatHullMetarialId = req.res.boatHullMetarialId;
+        const boatHullMetarialId = req.body.boatHullMetarialId;
 
         const newModel = new boatModel({
             manufacturerId: manufacturerId,
@@ -148,13 +149,37 @@ const getAllModels_get = async (req, res) => {
     }
 };
 
-// get model by modelcode
-const getModelByModelCode_get = async (req, res) => {
+// population
+const getModelDetails = async (req, res) => {
     try {
-        const manufacturerId = req.params.id;
+        const modelDetails = await boatModel.find({ isDeleted: false })
+            .populate({
+                path: 'manufacturerId',
+                select: 'manufacturerName'
+            })
+            .populate({
+                path: 'typeId',
+                select: 'typeName'
+            })
+            .populate({
+                path: 'boatHullMetarialId',
+                select: 'boatHullMetarialName'
+            });
+
+        return res.status(200).json(modelDetails);
+    } catch (err) {
+        console.error("Caught an error: ", err );
+        return res.status(500).json({ error: "Internal server error." });
+    }
+}
+
+// get model by modelcode
+const getModelById_get = async (req, res) => {
+    try {
+        const modelId = req.params.id;
         
-        const model = await boatModel.find({
-            manufacturerId: manufacturerId
+        const model = await boatModel.findOne({
+            _id: modelId
         });
 
         if (!model) {
@@ -173,7 +198,7 @@ const getModelByModelCode_get = async (req, res) => {
 }
 
 // get models by manufacturers
-const getModelsByManufacturerCode_get = async (req, res) => {
+const getModelsByManufacturerId_get = async (req, res) => {
     try {
         const manufacturerId = req.params.id;
 
@@ -259,9 +284,10 @@ module.exports = {
     updateModel_put,
     deleteModel_delete,
     getAllModels_get,
-    getModelByModelCode_get,
-    getModelsByManufacturerCode_get,
+    getModelById_get,
+    getModelsByManufacturerId_get,
     getManufacturerNameById,
     getTypeNameById,
-    getHullMetarialNameById
+    getHullMetarialNameById,
+    getModelDetails
 };
